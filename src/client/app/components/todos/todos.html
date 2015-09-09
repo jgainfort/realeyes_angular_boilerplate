@@ -1,0 +1,16 @@
+<h2>You've got {{vm.getTotalTodos()}} things to do</h2>
+<ul>
+    <li ng-repeat="todo in vm.todos">
+        <input type="checkbox" ng-model="todo.done">
+        <span class="done-{{todo.done}}">{{todo.text}}</span>
+    </li>
+</ul>
+<form>
+    <input type="text" placeholder="I need to..." ng-model="vm.formTodoText">
+    <button ng-click="vm.addTodo()">
+        Add
+    </button>
+</form>
+<button ng-click="vm.clearCompleted()">
+    Clear completed
+</button>

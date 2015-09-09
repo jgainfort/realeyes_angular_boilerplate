@@ -1,0 +1,8 @@
+build/
+node_modules/
+typings/
+*.log
+.settings/
+.tmp/
+.DS_STORE
+src/client/libs/

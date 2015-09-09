@@ -1,0 +1,26 @@
+{
+  "name": "realeyes_angular_boilerplate",
+  "version": "0.0.1",
+  "authors": [
+    "John G. Gainfort, Jr. <john.gainfort@realeyes.com>"
+  ],
+  "description": "Realeyes Angular Application BoilerPlate",
+  "keywords": [
+    "Realeyes",
+    "Angular",
+    "BoilerPlate"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/client/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.5",
+    "underscore": "~1.8.3"
+  }
+}
