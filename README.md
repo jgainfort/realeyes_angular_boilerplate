@@ -1,6 +1,6 @@
 # Realeyes AngularJS Boilerplate
 
-Create a new AngularJS Application using Realeyes style boilerplate.
+Create a new AngularJS Application using Realeyes style boilerplate. Includes ExpressJS Server.
 
 ## Prerequisites
 
