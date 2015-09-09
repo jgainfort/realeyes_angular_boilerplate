@@ -4,12 +4,12 @@ Create a new AngularJS Application using Realeyes style boilerplate. Includes Ex
 
 ## Prerequisites
 
-1.  Install [Node.js](http://nodejs.org)
+1. Install [Node.js](http://nodejs.org)
 
 - on OSX use [homebrew](http://brew.sh) `brew install node`
 - on Windows use [chocolatey](https://chocolatey.org) `choco install nodejs`
 
-2.  Install these NPM packages globally
+2. Install these NPM packages globally
 
 ```bash
 npm install -g bower gulp nodemon tsd
@@ -19,7 +19,7 @@ npm install -g bower gulp nodemon tsd
 
 ## QuickStart
 
-1.  Within project root directory perform the following:
+1. Within project root directory perform the following:
 
 ```bash
 npm install
@@ -29,13 +29,13 @@ npm install
 
 ### Remove Current Git Tracking
 
-1.  Within project root directory perform the following:
+1. Within project root directory perform the following:
 
 ```bash
 rm -rf .git
 ```
 
-2.  Set tracking to new project repository
+2. Set tracking to new project repository
 
 ```bash
 git init
@@ -51,7 +51,7 @@ git push -u origin master
 
 ### Linting
 
-- Run code analysis using `gulp vet`. This runs hshint and jscs.
+- Run code analysis using `gulp vet`. This runs jshint and jscs.
 
 ### Running in dev mode
 
