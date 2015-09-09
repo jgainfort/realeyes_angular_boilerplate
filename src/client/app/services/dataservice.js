@@ -22,6 +22,7 @@
         return service;
     }
 
+    // declare the dataservice to be available app wide
     angular.module('app')
         .factory('dataservice', dataservice);
 })();

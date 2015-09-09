@@ -62,7 +62,7 @@ module.exports = function () {
         paths: paths,
         buildPaths: buildPaths,
         bower: bower,
-        defaultPort: '3380',
+        defaultPort: '8001',
         server: './src/server',
         client: './src/client',
         source: './src',
