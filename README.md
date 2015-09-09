@@ -155,6 +155,7 @@ tsd install
 ### Bumping Versions
 
 - `gulp bump`
+
     Bump the minor version using semver.
     --type=patch // default
     --type=minor
