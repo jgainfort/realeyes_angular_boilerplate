@@ -1,9 +1,6 @@
 (function() {
     'use strict';
 
-    angular.module('app')
-        .factory('dataservice', dataservice);
-
     function dataservice() {
         function getTodos() {
             return [
@@ -24,4 +21,7 @@
 
         return service;
     }
+
+    angular.module('app')
+        .factory('dataservice', dataservice);
 })();

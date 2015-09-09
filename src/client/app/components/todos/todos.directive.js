@@ -1,17 +1,10 @@
+/* global:_ */
+
 (function () {
     'use strict';
 
-    TodosController.$inject = ['dataservice'];
-
     function TodosController(dataservice) {
         var vm = this;
-
-        // TODO: Get this array from a service
-        vm.todos = dataservice.getTodos();
-
-        vm.getTotalTodos = getTotalTodos;
-        vm.addTodo = addTodo;
-        vm.clearCompleted = clearCompleted;
 
         function addTodo() {
             vm.todos.push({text: vm.formTodoText, done: false});
@@ -26,7 +19,15 @@
         function getTotalTodos() {
             return vm.todos.length;
         }
+
+        vm.todos = dataservice.getTodos();
+
+        vm.getTotalTodos = getTotalTodos;
+        vm.addTodo = addTodo;
+        vm.clearCompleted = clearCompleted;
     }
+
+    TodosController.$inject = ['dataservice'];
 
     function todosDirective() {
         return {

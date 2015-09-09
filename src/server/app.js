@@ -8,6 +8,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var environment = process.env.NODE_ENV;
+
 // routing
 var routes = require('./routes/index');
 
@@ -19,9 +21,24 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../../build')));
+// app.use(express.static(path.join(__dirname, '../../build')));
 
 app.use('/', routes);
+
+switch (environment) {
+    case 'build': {
+        console.log('** BUILD **');
+        app.use(express.static(path.join(__dirname, '../../build/')));
+        break;
+    }
+    default: {
+        console.log('** DEV **');
+        app.use(express.static(path.join(__dirname, '../client/')));
+        app.use(express.static(path.join(__dirname, '../../')));
+        app.use(express.static(path.join(__dirname, '../../.tmp')));
+        break;
+    }
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

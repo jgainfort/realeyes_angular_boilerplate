@@ -93,7 +93,8 @@ function startBrowserSync(isDev, specRunner) {
         gulp.watch([config.paths.less], ['styles'])
             .on('change', changeEvent);
     } else {
-        gulp.watch([config.paths.less, config.paths.js, config.paths.htmlTemplates], ['optimize', browserSync.reload])
+        gulp.watch([config.paths.less, config.paths.js, config.paths.htmlTemplates],
+            ['optimize', browserSync.reload])
             .on('change', changeEvent);
     }
 
