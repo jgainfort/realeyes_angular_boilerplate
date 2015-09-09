@@ -128,7 +128,7 @@ git push -u origin master
 
 - `gulp templatecache`
 
-    Create an Angular module that adds all HTMl templates to Angular's $templateCache. This pre-fetches all HTML templates saving XHR calls for the HTML.
+    Create an Angular module that adds all HTML templates to Angular's $templateCache. This pre-fetches all HTML templates saving XHR calls for the HTML.
 - `gulp templatecache --verbose`
 
     Displays all files affected by the task.
