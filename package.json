@@ -1,7 +1,16 @@
 {
     "name": "realeyes_angular_boilerplate",
     "version": "0.0.1",
-    "private": true,
+    "authors": [
+        "John G. Gainfort, Jr. <john.gainfort@realeyes.com>"
+    ],
+    "description": "Realeyes Angular Application BoilerPlate",
+    "keywords": [
+        "Realeyes",
+        "Angular",
+        "BoilerPlate"
+    ],
+    "license": "MIT",
     "scripts": {
         "prepublish": "tsd install",
         "init": "npm install",

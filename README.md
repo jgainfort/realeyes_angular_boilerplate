@@ -19,11 +19,33 @@ npm install -g bower gulp nodemon tsd
 
 ## QuickStart
 
-1. Within root directory perform the following
+1. Within project root directory perform the following:
 
 ```bash
 npm install
 ```
+
+## Renaming Project
+
+### Remove Current Git Tracking
+
+1. Within project root directory perform the following:
+
+```bash
+rm -rf .git
+```
+
+2. Set tracking to new project repository
+
+```bash
+git init
+git add -A
+git commit -m "first commit"
+git remote add origin <remote repo url>
+git push -u origin master
+```
+
+3. Update package.json and bower.json with new project name, authors, license, etc.
 
 ## Project Options
 
