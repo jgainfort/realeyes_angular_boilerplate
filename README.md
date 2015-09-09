@@ -23,8 +23,6 @@ npm install -g bower gulp nodemon tsd
 
 ```bash
 npm install
-bower install
-tsd install
 ```
 
 ## Project Options
