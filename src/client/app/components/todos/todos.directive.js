@@ -8,6 +8,7 @@
 
         function addTodo() {
             vm.todos.push({text: vm.formTodoText, done: false});
+            vm.formTodoText = '';
         }
 
         function clearCompleted() {
