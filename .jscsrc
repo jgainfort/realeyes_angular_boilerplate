@@ -12,7 +12,7 @@
     ],
     "requireOperatorBeforeLineBreak": true,
     "requireCamelCaseOrUpperCaseIdentifiers": true,
-    "maximumLineLength": 100,
+    "maximumLineLength": 140,
     "validateIndentation": 4,
     "validateQuoteMarks": "'",
 

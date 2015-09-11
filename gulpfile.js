@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var glob = require('glob');
 var args = require('yargs').argv;
 var del = require('del');
 var jshint = require('gulp-jshint');
@@ -7,6 +8,9 @@ var browserSync = require('browser-sync');
 var path = require('path');
 var config = require('./gulpfile.config')();
 var notifier = require('node-notifier');
+var plato = require('plato');
+var fork = require('child_process').fork;
+var karma = require('karma').server;
 var _ = require('lodash');
 var $ = require('gulp-load-plugins')({ lazy: true });
 
@@ -246,6 +250,80 @@ function serve(isDev, specRunner) {
 }
 
 /**
+ * Start Plato inspector and visualizer
+ */
+function startPlatoVisualizer(done) {
+    log('Running Plato');
+
+    var files = glob.sync(config.plato.js);
+
+    var options = {
+        title: config.plato.title,
+        exclude: config.plato.excludeFiles
+    };
+
+    var outputDir = config.report + '/plato';
+
+    function platoCompleted(report) {
+        var overview = plato.getOverviewReport(report);
+        if (args.verbose) {
+            log(overview.summary);
+        }
+
+        if (done) {
+            done();
+        }
+    }
+
+    plato.inspect(files, outputDir, options, platoCompleted);
+}
+
+/**
+ * Start the tests using karma.
+ * @param {boolean} singleRun - True means run once and end (CI), or keep running (dev)
+ * @param {Function} done - Callback to fire when karma is done
+ * @return {undefined}
+ */
+function startTests(singleRun, done) {
+    var child;
+    var excludeFiles = [];
+    var serverSpecs = config.serverIntegrationSpecs;
+
+    if (args.startServers) {
+        log('Starting servers');
+        var savedEnv = process.env;
+        savedEnv.NODE_ENV = 'dev';
+        savedEnv.PORT = 8888;
+        child = fork(config.nodeServer);
+    } else {
+        if (serverSpecs && serverSpecs.length) {
+            excludeFiles = serverSpecs;
+        }
+    }
+
+    function karmaCompleted(karmaResult) {
+        log('Karma completed');
+
+        if (child) {
+            log('Shutting down the child process');
+            child.kill();
+        }
+
+        if (karmaResult === 1) {
+            done('Karma: tests failed with code ' + karmaResult);
+        } else {
+            done();
+        }
+    }
+
+    karma.start({
+        configFile: __dirname + '/karma.conf.js',
+        exculde: excludeFiles,
+        singleRun: !!singleRun
+    }, karmaCompleted);
+}
+
+/**
 * List the available gulp tasks
 */
 gulp.task('help', $.taskListing);
@@ -267,6 +345,70 @@ gulp.task('vet', function () {
 });
 
 /**
+ * Create a visualizer report
+ */
+gulp.task('plato', function (done) {
+    log('Analyzing source with Plato');
+    log('Browse to /report/plato/index.html to see Plato results');
+
+    startPlatoVisualizer(done);
+});
+
+/**
+ * Run specs once and exit
+ * To start servers and run midway sepcs as well:
+ *     gulp test --startServers
+ * @return {Stream}
+ */
+gulp.task('test', ['vet', 'templatecache'], function (done) {
+    startTests(true /*singleRun*/, done);
+});
+
+/**
+ * Run specs and wait
+ * Watch for file changes and re-run tests on each change
+ * To start servers and run midway specs as well:
+ *    gulp autotest --startServers
+ */
+gulp.task('autotest', function (done) {
+    startTests(false /*singleRun*/, done);
+});
+
+gulp.task('serve-specs', ['build-specs'], function (done) {
+    log('Run the spec runner');
+
+    serve(true /* isDev */, true /* specRunner */);
+    done();
+});
+
+/**
+ * Inject all the spec files into the specs.html
+ * @return {Stream}
+ */
+gulp.task('build-specs', ['templatecache'], function (done) {
+    log('Building the spec runner');
+
+    var templateCache = config.temp + config.templateCache.file;
+    var options = config.getWiredepDefaultOptions();
+    var specs = config.specs;
+
+    if (args.startServers) {
+        specs = [].concat(specs, config.serverIntegrationSpecs);
+    }
+
+    options.devDependencies = true;
+
+    return gulp.src(config.specRunner)
+        .pipe(wiredep(options))
+        .pipe(inject(config.paths.js, '', config.jsOrder))
+        .pipe(inject(config.testLibraries, 'testlibraries'))
+        .pipe(inject(config.specHelpers, 'spechelpers'))
+        .pipe(inject(specs, 'specs', ['**/*']))
+        .pipe(inject(templateCache, 'templates'))
+        .pipe(gulp.dest(config.paths.client));
+});
+
+/**
  * Build everything
  * This is separate so we can run tests on
  * optimize before handling image or fonts
@@ -285,7 +427,7 @@ gulp.task('build', ['optimize', 'images', 'fonts'], function () {
     notify(msg);
 });
 
-gulp.task('optimize', ['inject'], function () {
+gulp.task('optimize', ['inject', 'test'], function () {
     log('Optimizing the js, css, and html');
 
     var assets = $.useref.assets({ searchPath: './' });

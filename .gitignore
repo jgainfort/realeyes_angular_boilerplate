@@ -6,3 +6,5 @@ typings/
 .tmp/
 .DS_STORE
 src/client/libs/
+report/
+.vscode/

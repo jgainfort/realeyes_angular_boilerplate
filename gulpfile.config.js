@@ -1,8 +1,14 @@
 module.exports = function () {
     var temp = './.tmp/';
+    var wiredep = require('wiredep');
+    var bowerFiles = wiredep({devDependencies: true}).js;
 
     var paths = {
-        js: './src/client/app/**/*.js',
+        client: './src/client',
+        js: [
+            './src/client/app/**/*.js',
+            '!./src/client/app/**/*.spec.js'
+        ],
         less: './src/client/styles/styles.less',
         images: './src/client/images/**/*',
         fonts: './src/client/fonts/**/*',
@@ -53,6 +59,27 @@ module.exports = function () {
         '**/*.js'
     ];
 
+    var plato = {
+        title: 'Plato Inspections Report',
+        js: './src/client/app/**/*.js',
+        excludeFiles: /.*\.spec\.js/
+    };
+
+    var testLibraries = [
+        'node_modules/mocha/mocha.js',
+        'node_modules/chai/chai.js',
+        'node_modules/mocha-clean/index.js',
+        'node_modules/sinon-chai/lib/sinon-chai.js'
+    ];
+
+    var specHelpers = [
+        './src/client/test-helpers/*.js'
+    ];
+
+    var specs = [
+        './src/client/app/**/*.spec.js'
+    ];
+
     var config = {
         allJs: [
             './src/**/*.js',
@@ -69,12 +96,18 @@ module.exports = function () {
         temp: temp,
         nodeServer: './src/server/bin/www',
         browserReloadDelay: 1000,
-        report: './report',
+        report: './report/',
         css: temp + 'styles.css',
         templateCache: templateCache,
         optimized: optimized,
         root: './',
-        jsOrder: jsOrder
+        jsOrder: jsOrder,
+        plato: plato,
+        specRunner: './src/client/specs.html',
+        specRunnerFile: 'specs.html',
+        testLibraries: testLibraries,
+        specHelpers: specHelpers,
+        specs: specs
     };
 
     config.getWiredepDefaultOptions = function () {
@@ -86,6 +119,35 @@ module.exports = function () {
 
         return options;
     };
+
+    function getKarmaOptions() {
+        var options = {
+            files: [].concat(
+                bowerFiles,
+                config.specHelpers,
+                './src/client/app/**/*.module.js',
+                './src/client/app/**/*.js',
+                temp + config.templateCache.file
+            ),
+            exclude: [],
+            coverage: {
+                dir: config.report + 'coverage',
+                reporters: [
+                    // reporters not supporting the `file` property
+                    {type: 'html', subdir: 'report-html'},
+                    {type: 'lcov', subdir: 'report-lcov'},
+                    {type: 'text-summary'} //, subdir: '.', file; 'text-summary.text}
+                ]
+            },
+            preprocessors: {}
+        };
+
+        options.preprocessors['./src/client/app/**/!(*.spec)+(.js)'] = ['coverage'];
+
+        return options;
+    }
+
+    config.karma = getKarmaOptions();
 
     return config;
 };

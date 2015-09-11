@@ -31,9 +31,9 @@ switch (app.get('env')) {
         app.use(express.static(path.join(__dirname, '../../.tmp')));
         break;
     }
-
-    app.use('/', routes);
 }
+
+app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
