@@ -374,13 +374,6 @@ gulp.task('autotest', function (done) {
     startTests(false /*singleRun*/, done);
 });
 
-gulp.task('serve-specs', ['build-specs'], function (done) {
-    log('Run the spec runner');
-
-    serve(true /* isDev */, true /* specRunner */);
-    done();
-});
-
 /**
  * Inject all the spec files into the specs.html
  * @return {Stream}
@@ -636,6 +629,13 @@ gulp.task('serve-dev', ['inject'], function () {
  */
 gulp.task('serve-build', ['build'], function () {
     serve(false /*isDev*/);
+});
+
+gulp.task('serve-specs', ['build-specs'], function (done) {
+    log('Run the spec runner');
+
+    serve(true /* isDev */, true /* specRunner */);
+    done();
 });
 
 module.exports = gulp;

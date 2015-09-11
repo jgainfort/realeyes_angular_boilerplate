@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "bardjs": "~0.1.8",
-    "sinon": "~1.16.1"
+    "sinon": "http://sinonjs.org/releases/sinon-1.12.1.js"
   }
 }
